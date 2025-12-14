@@ -19,7 +19,7 @@ public class DatabaseConnectionTest {
     void testDattabaseConnection() throws Exception {
         Connection connection  = dataSource.getConnection();
         assertNotNull(connection);
-        System.out.println("Conectado com o baanco de dados");
+        System.out.println("Conectado com o banco de dados");
         connection.close();
     }
 
