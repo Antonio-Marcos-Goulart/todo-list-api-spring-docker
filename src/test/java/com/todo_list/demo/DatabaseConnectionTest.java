@@ -16,11 +16,10 @@ public class DatabaseConnectionTest {
     private DataSource dataSource;
 
     @Test
-    void testDattabaseConnection() throws Exception {
+    void testDatabaseConnection() throws Exception {
         Connection connection  = dataSource.getConnection();
         assertNotNull(connection);
         System.out.println("Conectado com o banco de dados");
         connection.close();
     }
-
 }
