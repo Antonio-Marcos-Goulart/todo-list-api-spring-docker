@@ -1,7 +1,7 @@
 package com.todo_list.demo.model;
 
-import com.todo_list.demo.enuns.TaskPriority;
-import com.todo_list.demo.enuns.TaskStatus;
+import com.todo_list.demo.enums.TaskPriority;
+import com.todo_list.demo.enums.TaskStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
