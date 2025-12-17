@@ -1,72 +1,74 @@
 package com.todo_list.demo.service;
 
+import com.todo_list.demo.DTOS.TasksDTO;
 import com.todo_list.demo.model.Task;
 import com.todo_list.demo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
+
     private final TaskRepository taskRepository;
 
     public TaskService(TaskRepository taskRepository) {
         this.taskRepository = taskRepository;
     }
 
-    public Task createTask(Task task) {
-        if (task.getTaskTitle() == null || task.getTaskTitle().length() < 3) {
-            throw new IllegalArgumentException("The task title cannot be null or shorter than 3 characters");
-        }
-        if (task.getTaskStatus() == null) {
-            throw new IllegalArgumentException("The task status cannot be null");
-        }
-        if (task.getTaskPriority() == null) {
-            throw new IllegalArgumentException("The task priority cannot be null");
-        }
+    public Task createTask(TasksDTO dto) {
+        Task task = new Task();
+        task.setTaskTitle(dto.getTaskTitle());
+        task.setTaskDescription(dto.getTaskDescription());
+        task.setTaskStatus(dto.getTaskStatus());
+        task.setTaskPriority(dto.getTaskPriority());
         return taskRepository.save(task);
-
     }
 
+
     public Task getTaskById(Long id) {
-        return taskRepository.findById(id) .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+        return taskRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Task not found with id: " + id));
+    }
+
+    public List<Task> getAllTasks() {
+        return taskRepository.findAll();
     }
 
     public List<Task> searchTask(Long id, String title) {
-        List<Task> dataTask = List.of();
         if (id != null) {
-            Task task = taskRepository.findById(id).orElse(null);
-            if (task != null) {
-                dataTask = List.of(task);
-            }
-        } else if (title != null && title.isBlank()) {
-            dataTask = taskRepository.findByTaskTitleContainingIgnoreCase(title);
+            return taskRepository.findById(id)
+                    .map(List::of)
+                    .orElse(List.of());
+        }
+        if (title != null && !title.isBlank()) {
+            return taskRepository.findByTaskTitleContainingIgnoreCase(title);
         }
 
-        if (dataTask.isEmpty()) {
-            throw new IllegalArgumentException("No tasks were found that matched the provided criteria");
-        }
-        return dataTask;
+        return List.of();
     }
 
-    public Task updateTask(Long id, Task updatedTask) {
-        Task existingTask = taskRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Task not found with id: " + id));
+    public Task updateTask(Long id, TasksDTO dto) {
+        Task existingTask = getTaskById(id);
 
-        if (updatedTask.getTaskTitle() != null && updatedTask.getTaskTitle().length() >= 3) {
-            existingTask.setTaskTitle(updatedTask.getTaskTitle());
+        if (dto.getTaskTitle() != null) {
+            if (dto.getTaskTitle().length() < 3) {
+                throw new IllegalArgumentException("The task title must have at least 3 characters");
+            }
+            existingTask.setTaskTitle(dto.getTaskTitle());
         }
 
-        if (updatedTask.getTaskStatus() != null) {
-            existingTask.setTaskStatus(updatedTask.getTaskStatus());
+        if (dto.getTaskDescription() != null) {
+            existingTask.setTaskDescription(dto.getTaskDescription());
         }
 
-        if (updatedTask.getTaskPriority() != null) {
-            existingTask.setTaskPriority(updatedTask.getTaskPriority());
+        if (dto.getTaskStatus() != null) {
+            existingTask.setTaskStatus(dto.getTaskStatus());
         }
 
-        if (updatedTask.getTaskDescription() != null) {
-            existingTask.setTaskDescription(updatedTask.getTaskDescription());
+        if (dto.getTaskPriority() != null) {
+            existingTask.setTaskPriority(dto.getTaskPriority());
         }
 
         return taskRepository.save(existingTask);
@@ -77,5 +79,23 @@ public class TaskService {
             throw new IllegalArgumentException("Task not found with id: " + id);
         }
         taskRepository.deleteById(id);
+    }
+
+    private void validateTask(Task task) {
+        if (task == null) {
+            throw new IllegalArgumentException("Task cannot be null");
+        }
+
+        if (task.getTaskTitle() == null || task.getTaskTitle().length() < 3) {
+            throw new IllegalArgumentException("The task title must have at least 3 characters");
+        }
+
+        if (task.getTaskStatus() == null) {
+            throw new IllegalArgumentException("The task status cannot be null");
+        }
+
+        if (task.getTaskPriority() == null) {
+            throw new IllegalArgumentException("The task priority cannot be null");
+        }
     }
 }
