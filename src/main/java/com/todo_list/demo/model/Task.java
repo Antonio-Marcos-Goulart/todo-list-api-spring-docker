@@ -1,5 +1,6 @@
 package com.todo_list.demo.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.todo_list.demo.enums.TaskPriority;
 import com.todo_list.demo.enums.TaskStatus;
 import jakarta.persistence.*;
@@ -15,6 +16,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity
+
 @Table(name = "tasks")
 public class Task {
 
@@ -39,5 +41,10 @@ public class Task {
     @Enumerated(EnumType.STRING)
     @Column(name = "task_priority")
     private TaskPriority taskPriority;
+
+    @ManyToOne(optional = false)
+    @JoinColumn(name = "task_group_id")
+    @JsonBackReference
+    private TaskGroup taskGroup;
 
 }
