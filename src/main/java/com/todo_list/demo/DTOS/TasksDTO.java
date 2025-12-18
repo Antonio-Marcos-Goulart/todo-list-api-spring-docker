@@ -17,14 +17,8 @@ public class TasksDTO {
     private String taskDescription;
     private TaskStatus taskStatus;
     private TaskPriority taskPriority;
+    private Long taskGroupId;
 
     public TasksDTO(Task task) {
-        this.taskId = task.getTaskId();
-        this.taskTitle = task.getTaskTitle();
-        this.taskDescription = task.getTaskDescription();
-        this.taskStatus = task.getTaskStatus();
-        this.taskPriority = task.getTaskPriority();
     }
-
-
 }
