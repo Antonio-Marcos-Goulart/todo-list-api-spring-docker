@@ -2,19 +2,22 @@ package com.todo_list.demo.service;
 
 import com.todo_list.demo.DTOS.TasksDTO;
 import com.todo_list.demo.model.Task;
+import com.todo_list.demo.model.TaskGroup;
+import com.todo_list.demo.repository.TaskGroupRepository;
 import com.todo_list.demo.repository.TaskRepository;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 public class TaskService {
 
     private final TaskRepository taskRepository;
+    private final TaskGroupRepository taskGroupRepository;
 
-    public TaskService(TaskRepository taskRepository) {
+    public TaskService(TaskRepository taskRepository, TaskGroupRepository taskGroupRepository) {
         this.taskRepository = taskRepository;
+        this.taskGroupRepository = taskGroupRepository;
     }
 
     public Task createTask(TasksDTO dto) {
