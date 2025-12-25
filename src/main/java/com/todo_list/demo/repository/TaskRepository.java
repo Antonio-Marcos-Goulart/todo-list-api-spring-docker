@@ -12,14 +12,14 @@ public interface TaskRepository extends JpaRepository<Task, Long> {
 
     List<Task> findByTaskTitleContainingIgnoreCase(String title);
 
-    List<Task> findByTaskGroup_Id(Long taskGroupId);
+    List<Task> findByTaskGroup_TaskgroupId(Long taskGroupId);
 
-    List<Task> findByTaskGroup_IdAndTaskTitleContainingIgnoreCase(
-            Long taskGroupId,
-            String title
+    List<Task> findByTaskGroup_TaskgroupIdAndTaskTitleContainingIgnoreCase(
+            Long taskgroupId,
+            String taskTitle
     );
 
-    Optional<Task> findByTaskIdAndTaskGroup_Id(
+    Optional<Task> findByTaskIdAndTaskGroup_TaskgroupId(
             Long taskId,
             Long taskGroupId
     );
