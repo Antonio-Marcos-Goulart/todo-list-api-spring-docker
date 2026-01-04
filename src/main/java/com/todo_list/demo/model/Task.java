@@ -57,8 +57,3 @@ public class Task {
 
 }
 
-/* DATA DE CRIAÇÃO DA TAREFA
-@JsonFormat(pattern = "dd/MM/yyyy HH:mm:ss")
-    @Column(name = "data_cadastro", nullable = false, updatable = false) // updatable = false: não poderá ser alterada após inserção
-    protected LocalDateTime dataDeCadastro = LocalDateTime.now();
- */
