@@ -25,27 +25,31 @@ public class TaskService {
 
     @Transactional
     public Task createTask(TasksDTO dto) {
+        if (dto.getTaskGroupId() == null) {
+            throw new IllegalArgumentException("TaskGroupId is required");
+        }
+        TaskGroup group = taskGroupRepository.findById(dto.getTaskGroupId())
+                .orElseThrow(() ->
+                        new IllegalArgumentException(
+                                "TaskGroup not found with id " + dto.getTaskGroupId()
+                ));
+
         Task task = new Task();
         task.setTaskTitle(dto.getTaskTitle());
         task.setTaskDescription(dto.getTaskDescription());
         task.setTaskStatus(dto.getTaskStatus());
         task.setTaskPriority(dto.getTaskPriority());
 
-        if (dto.getTaskGroupId() == null) {
-            throw new IllegalArgumentException("TaskGroupId is required");
-        }
-        TaskGroup group = taskGroupRepository.findById(dto.getTaskGroupId())
-                .orElseThrow(() -> new IllegalArgumentException(
-                        "TaskGroup not found with id " + dto.getTaskGroupId()
-                ));
         task.setTaskGroup(group);
+
         return taskRepository.save(task);
     }
 
     @Transactional(readOnly = true)
     public Task getTaskById(Long id) {
         return taskRepository.findById(id)
-                .orElseThrow(() -> new IllegalArgumentException("Task not found with id: " + id));
+                .orElseThrow(() ->
+                        new IllegalArgumentException("Task not found with id: " + id));
     }
 
     @Transactional(readOnly = true)
@@ -54,16 +58,9 @@ public class TaskService {
     }
 
     @Transactional(readOnly = true)
-    public List<Task> searchTask(Long id, String title) {
-        if (id != null) {
-            return taskRepository.findById(id)
-                    .map(List::of)
-                    .orElse(List.of());
-        }
-        if (title != null && !title.isBlank()) {
-            return taskRepository.findByTaskTitleContainingIgnoreCase(title);
-        }
-        return List.of();
+    public List<Task> searchByTitle(String title) {
+        return taskRepository.findByTaskTitleContainingIgnoreCase(title);
+
     }
 
     @Transactional
@@ -71,32 +68,26 @@ public class TaskService {
         Task existingTask = getTaskById(id);
 
         if (dto.getTaskTitle() != null) {
-            if (dto.getTaskTitle().length() < 3) {
-                throw new IllegalArgumentException("The task title must have at least 3 characters");
-            }
             existingTask.setTaskTitle(dto.getTaskTitle());
         }
-
         if (dto.getTaskDescription() != null) {
             existingTask.setTaskDescription(dto.getTaskDescription());
         }
-
         if (dto.getTaskStatus() != null) {
             existingTask.setTaskStatus(dto.getTaskStatus());
         }
-
         if (dto.getTaskPriority() != null) {
             existingTask.setTaskPriority(dto.getTaskPriority());
         }
-
         if (dto.getTaskGroupId() != null) {
             TaskGroup group = taskGroupRepository.findById(dto.getTaskGroupId())
-                    .orElseThrow(() -> new IllegalArgumentException(
+                    .orElseThrow(() ->
+                            new IllegalArgumentException(
                             "Task Group not found with id " + dto.getTaskGroupId()
                     ));
             existingTask.setTaskGroup(group);
         }
-        return taskRepository.save(existingTask);
+        return existingTask;
     }
 
     @Transactional
@@ -105,23 +96,5 @@ public class TaskService {
             throw new IllegalArgumentException("Task not found with id: " + id);
         }
         taskRepository.deleteById(id);
-    }
-
-    private void validateTask(Task task) {
-        if (task == null) {
-            throw new IllegalArgumentException("Task cannot be null");
-        }
-
-        if (task.getTaskTitle() == null || task.getTaskTitle().length() < 3) {
-            throw new IllegalArgumentException("The task title must have at least 3 characters");
-        }
-
-        if (task.getTaskStatus() == null) {
-            throw new IllegalArgumentException("The task status cannot be null");
-        }
-
-        if (task.getTaskPriority() == null) {
-            throw new IllegalArgumentException("The task priority cannot be null");
-        }
     }
 }
