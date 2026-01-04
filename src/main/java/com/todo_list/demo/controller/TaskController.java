@@ -11,7 +11,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/tasks")
@@ -26,24 +25,37 @@ public class TaskController {
 
     @PostMapping
     @Operation(summary = "Create task", description = "Create task")
-    public ResponseEntity<Task> createTask(@Valid @RequestBody TasksDTO dto) {
+    public ResponseEntity<TasksDTO> createTask(@Valid @RequestBody TasksDTO dto) {
         Task saved = taskService.createTask(dto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(saved);
+        return ResponseEntity.status(HttpStatus.CREATED).body(new TasksDTO(saved));
     }
 
     @PutMapping("/{id}")
     @Operation(summary = "Update task by id", description = "Update an existing task by its id")
-    public ResponseEntity<Task> updateTask(
+    public ResponseEntity<TasksDTO> updateTask(
             @PathVariable Long id,
             @Valid @RequestBody TasksDTO dto) {
         Task updatedTask = taskService.updateTask(id, dto);
-        return ResponseEntity.ok(updatedTask);
+        return ResponseEntity.ok(new TasksDTO(updatedTask));
     }
 
-    @GetMapping("/all_tasks")
-    @Operation(summary = "List all tasks", description = "List all tasks")
-    public List<TasksDTO> getAllTasks(){
-        return taskService.getAllTasks().stream().map(TasksDTO::new).collect(Collectors.toList());
+    @GetMapping("/{id}")
+    @Operation(summary = "Search task by id", description = "Search task by Id")
+    public ResponseEntity<TasksDTO> getTaskById(@PathVariable Long id) {
+        Task task = taskService.getTaskById(id);
+        return ResponseEntity.ok(new TasksDTO(task));
+    }
+
+    @GetMapping
+    public ResponseEntity<List<TasksDTO>> search(@RequestParam(required = false) String title) {
+            List<Task> tasks = (title == null || title.isBlank())
+                    ? taskService.getAllTasks() // If the title is null or blank - get all tasks
+                    : taskService.searchByTitle(title); // Task searched
+
+            List<TasksDTO> tasksDTOList = tasks.stream()
+                    .map(TasksDTO::new)
+                    .toList();
+        return ResponseEntity.ok(tasksDTOList);
     }
 
     @DeleteMapping("/{id}")
@@ -51,20 +63,5 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id) {
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build(); // no response - no content
-    }
-
-    @GetMapping("/{id}")
-    @Operation(summary = "Search task by Id", description = "Search tasks by Id")
-    public ResponseEntity<TasksDTO> getTaskById(@PathVariable Long id) {
-        Task task = taskService.getTaskById(id);
-        return ResponseEntity.ok(new TasksDTO(task));
-    }
-
-    @GetMapping("/search")
-    @Operation(summary = "Search task by title and Id", description = "Search tasks by title and Id")
-    public ResponseEntity<List<Task>> searchTasks(
-            @RequestParam(required = false) Long id,
-            @RequestParam(required = false) String title) {
-        return ResponseEntity.ok(taskService.searchTask(id, title));
     }
 }
