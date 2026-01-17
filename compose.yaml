@@ -1,26 +1,22 @@
-  version: "3.8"
+services:
+  api:
+    build: .
+    container_name: todolist-api
+    ports:
+      - "8080:8080"
+    environment:
+      DB_URL: jdbc:postgresql://postgres:5432/mydatabase
+      DB_USERNAME: myuser
+      DB_PASSWORD: secret
+    depends_on:
+      - postgres
 
-  services:
-
-    api:
-      build: .
-      container_name: todolist-api
-      ports:
-        - "8080:8080"
-      environment:
-        SPRING_DATASOURCE_URL: jdbc:postgresql://postgres:5432/mydatabase
-        SPRING_DATASOURCE_USERNAME: myuser
-        SPRING_DATASOURCE_PASSWORD: secret
-        SPRING_JPA_HIBERNATE_DDL_AUTO: update
-      depends_on:
-        - postgres
-
-    postgres:
-      image: postgres:16
-      container_name: todolist-db
-      environment:
-        POSTGRES_DB: mydatabase
-        POSTGRES_USER: myuser
-        POSTGRES_PASSWORD: secret
-      ports:
-        - "5432:5432"
+  postgres:
+    image: postgres:16
+    container_name: todolist-db
+    environment:
+      POSTGRES_DB: mydatabase
+      POSTGRES_USER: myuser
+      POSTGRES_PASSWORD: secret
+    ports:
+      - "5432:5432"
