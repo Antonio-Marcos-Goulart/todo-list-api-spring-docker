@@ -6,6 +6,8 @@ API REST para gerenciamento de tarefas (To-Do List), desenvolvida em Java 21 com
 
 Este projeto marca a retomada dos estudos e práticas de desenvolvimento backend após o período de férias, com foco em reforçar fundamentos, aplicar boas práticas de arquitetura e consolidar conhecimentos em Spring Boot, JPA e APIs REST.
 
+Além disso, o projeto foi containerizado utilizando **Docker** e **Docker Compose**, facilitando o deploy, a escalabilidade e o gerenciamento do ambiente de desenvolvimento.
+
 ---
 
 ### Visão Geral
@@ -18,6 +20,7 @@ Os principais objetivos do projeto são:
 - Aplicar validações com Jakarta Validation
 - Persistir dados utilizando JPA e PostgreSQL
 - Documentar APIs REST de forma padronizada e profissional
+- Facilitar o deploy e desenvolvimento local com Docker e Docker Compose
 
 ---
 
@@ -33,6 +36,7 @@ Os principais objetivos do projeto são:
 - Lombok
 - Dotenv
 - Maven
+- Docker & Docker Compose
 - JUnit e Spring Boot Test
 
 ---
@@ -47,6 +51,7 @@ Os principais objetivos do projeto são:
 - Organização de tarefas em grupos
 - Validação de dados de entrada
 - Geração automática da documentação da API
+- Execução isolada em containers via Docker e Docker Compose
 
 ---
 
@@ -54,12 +59,12 @@ Os principais objetivos do projeto são:
 
 O projeto adota uma arquitetura em camadas, promovendo separação de responsabilidades e maior manutenibilidade do código:
 
-- Controller: responsável por receber e responder às requisições HTTP
-- Service: responsável pelas regras de negócio
-- Repository: responsável pelo acesso e persistência dos dados
-- Model: entidades JPA que representam o domínio
-- DTO: objetos utilizados para transferência de dados
-- Config: configurações gerais da aplicação
+- **Controller**: responsável por receber e responder às requisições HTTP
+- **Service**: responsável pelas regras de negócio
+- **Repository**: responsável pelo acesso e persistência dos dados
+- **Model**: entidades JPA que representam o domínio
+- **DTO**: objetos utilizados para transferência de dados
+- **Config**: configurações gerais da aplicação
 
 ---
 
@@ -68,6 +73,8 @@ O projeto adota uma arquitetura em camadas, promovendo separação de responsabi
 REST API for task management (To-Do List), developed using Java 21 and Spring Boot 3.4.1.
 
 This project represents the return to backend development studies and practice after a vacation period, focusing on reinforcing fundamentals, applying good architectural practices, and consolidating knowledge in Spring Boot, JPA, and REST APIs.
+
+Additionally, the project has been containerized using **Docker** and **Docker Compose**, making deployment, scalability, and development environment management easier.
 
 ---
 
@@ -81,6 +88,7 @@ The main goals of this project are:
 - Apply validations using Jakarta Validation
 - Persist data using JPA and PostgreSQL
 - Document REST APIs in a standardized and professional way
+- Enable easy deployment and local development with Docker and Docker Compose
 
 ---
 
@@ -96,6 +104,7 @@ The main goals of this project are:
 - Lombok
 - Dotenv
 - Maven
+- Docker & Docker Compose
 - JUnit and Spring Boot Test
 
 ---
@@ -110,6 +119,7 @@ The main goals of this project are:
 - Task grouping support
 - Input data validation
 - Automatic API documentation generation
+- Containerized execution via Docker and Docker Compose
 
 ---
 
@@ -117,9 +127,9 @@ The main goals of this project are:
 
 The project follows a layered architecture, promoting separation of concerns and improved code maintainability:
 
-- Controller: handles HTTP requests and responses
-- Service: contains business rules
-- Repository: handles data access and persistence
-- Model: JPA entities representing the domain
-- DTO: data transfer objects
-- Config: application configuration classes
+- **Controller**: handles HTTP requests and responses
+- **Service**: contains business rules
+- **Repository**: handles data access and persistence
+- **Model**: JPA entities representing the domain
+- **DTO**: data transfer objects
+- **Config**: application configuration classes
